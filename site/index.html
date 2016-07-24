@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>Hello, Molbourne Artworks!</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script src="js/geojson.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<!-- <script src='https://api.mapbox.com/mapbox-gl-js/v0.21.0/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v0.21.0/mapbox-gl.css' rel='stylesheet' /> -->
+<script src='https://api.tiles.mapbox.com/mapbox.js/v2.2.4/mapbox.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox.js/v2.2.4/mapbox.css' rel='stylesheet' />
+<style>
+  body { margin:0; padding:0; }
+  .map { position:absolute; top:0; bottom:0; width:100%; }
+</style>
+</head>
+<body>
+<!-- <div id='map'></div> -->
+<div id='map-leaflet' class='map'> </div>
+<script>
+L.mapbox.accessToken = 'pk.eyJ1Ijoic3ZlbmJpbnN2ZW4iLCJhIjoiY2lxeDZsa21qMDFnOGZta3EzN2x0YmFnaSJ9.NgBoe1qLpef_OOrvh5TUVg';
+
+var mapLeaflet = L.mapbox.map('map-leaflet', 'mapbox.light')
+  .setView([-37.8142176, 144.9631608], 12);
+
+// L.marker([-37.8142176, 144.9631608]).addTo(mapLeaflet);
+// L.marker([-37.8142176, 145.0141608]).addTo(mapLeaflet);
+
+jQuery.getJSON("https://data.melbourne.vic.gov.au/resource/4ev8-tces.json", function(data) {
+    //data is the JSON string
+    // datajs = JSON.stringify(data);
+    // console.log(isJson(datajs));
+    // console.log(datajs);
+    console.log(data);
+	var formatdata = data.map(function (obj){
+	obj.geom = obj.geom["coordinates"];
+	return obj;
+	});
+
+    console.log(formatdata);
+
+    datageojs = GeoJSON.parse(formatdata, {Point: "geom"});
+    console.log(datageojs);
+
+    L.geoJson(datageojs).addTo(mapLeaflet);
+});
+
+// mapboxgl.accessToken = 'pk.eyJ1Ijoic3ZlbmJpbnN2ZW4iLCJhIjoiY2lxeDZsa21qMDFnOGZta3EzN2x0YmFnaSJ9.NgBoe1qLpef_OOrvh5TUVg';
+// var map = new mapboxgl.Map({
+//     container: 'map',
+//     style: 'mapbox://styles/mapbox/satellite-streets-v9',
+//     // maxBounds: [[-122.9521, 37.9339], [-121.8741, 37.4558]]
+//     maxBounds: [[144.1516, -37.3800], [146.3077, -38.3341]]
+// });
+
+// function isJson(str) {
+//     try {
+//         JSON.parse(str);
+//     } catch (e) {
+//         return false;
+//     }
+//     return true;
+// }
+
+// var visdata;
+
+// jQuery.getJSON("https://data.melbourne.vic.gov.au/resource/4ev8-tces.json", function(data) {
+//     //data is the JSON string
+//     // datajs = JSON.stringify(data);
+//     // console.log(isJson(datajs));
+//     // console.log(datajs);
+//     console.log(data);
+//     datageojs = GeoJSON.parse(data, {Point: "geom"});
+//     console.log(datageojs);
+
+// // var marker = {
+// //         "type": "geojson",
+// //         "data": datageojs
+// //     };
+
+// // console.log(marker);
+
+// map.on('load', function () {
+//     map.addSource('Pub_Arts', {
+//         "type": "geojson",
+//         "data": datageojs
+//     });
+//     map.addLayer({
+//         id: 'points',
+//         type: 'circle',
+//         source: 'Pub_Arts',
+//         // 'source-layer': 'RPD_Parks',
+//         layout: {
+//             visibility: 'visible'
+//         // // },
+//         // // paint: {
+//         // //     'fill-color': '#00ffff'
+//         // "icon-image": "{icon}-15",
+//         // "text-field": "{artdate}",
+//         // "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+//         // // "text-offset": [0, 0.6],
+//         // "text-anchor": "top"
+//         }
+//     });
+// });
+
+// });
+
+// var marker = new mapboxgl.Marker()
+//   .setLngLat([145.1516, -38.0000])
+//   .addTo(map);
+
+</script>
+</body>
+</html>
